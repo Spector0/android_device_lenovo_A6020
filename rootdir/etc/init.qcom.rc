@@ -47,8 +47,7 @@ on init
     # Set permissions for persist partition
     mkdir /persist 0771 system system
 
-    export LD_SHIM_LIBS /system/lib64/libril.so|libshim_ril.so:/system/vendor/lib/libmmcamera2_stats_modules.so|libshim_gui.so:/system/vendor/lib/libmmcamera2_stats_modules.so|libshim_atomic.so:/system/lib/hw/camera.vendor.msm8916.so|libshim_atomic.so:/system/lib/libmmjpeg_interface.so|libshim_atomic.so:/system/vendor/lib64/libril-qc-qmi-1.so|rild_socket.so:/system/vendor/lib64/lib-imsvt.so|libshims_ims.so:/system/vendor/lib64/lib-imscamera.so|libshims_camera.so
-
+    export LD_SHIM_LIBS "/system/lib64/libril.so|libshim_ril.so:/system/vendor/lib/libmmcamera2_stats_modules.so|libshim_gui.so:/system/vendor/lib/libmmcamera2_stats_modules.so|libshim_atomic.so:/system/lib/hw/camera.vendor.msm8916.so|libshim_atomic.so:/system/lib/libmmjpeg_interface.so|libshim_atomic.so:/system/vendor/lib64/libril-qc-qmi-1.so|rild_socket.so:/system/vendor/lib64/libflp.so|libshims_flp.so:/system/vendor/lib64/libizat_core.so|libshims_get_process_name.so"
 
     # Enable power-on alarm
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
@@ -399,7 +398,7 @@ service irsc_util /system/bin/irsc_util "/etc/sec_config"
 service rmt_storage /system/bin/rmt_storage
     class core
     user root
-    group wakelock
+    group system wakelock
     writepid /dev/cpuset/system-background/tasks
 
 service config_bt_addr /system/bin/btnvtool -O
@@ -460,6 +459,7 @@ service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     disabled
     oneshot
 
+ 
 service hostapd /vendor/bin/hostapd -dd /data/misc/wifi/hostapd.conf
     class late_start
     user root
@@ -467,11 +467,12 @@ service hostapd /vendor/bin/hostapd -dd /data/misc/wifi/hostapd.conf
     oneshot
     disabled
 
-service ril-daemon2 /vendor/bin/hw/rild -c 2
-    class main
+service ril-daemon2 /vendor/bin/hw/rild -c 2 
+    class main 
     user radio
     group radio cache inet misc audio log readproc wakelock
     capabilities BLOCK_SUSPEND NET_ADMIN NET_RAW
+ 
 
 service rild2-wrapper /system/bin/sh /system/etc/init.qcom.ril.sh
     class late_start
@@ -493,7 +494,7 @@ on charger
     chmod 0664 /sys/class/power_supply/bms/voltage_ocv
 
     start vm_bms
-    
+
 service vm_bms /system/bin/vm_bms
     class main
     user root
@@ -502,7 +503,7 @@ service vm_bms /system/bin/vm_bms
 service charger /charger
     class charger
     critical
-    seclabel u:r:healthd:s0
+    seclabel u:r:charger:s0
 
 service msm_irqbalance /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance.conf
     class core
@@ -519,6 +520,11 @@ service qcom-sh /system/bin/sh /system/etc/init.qcom.sh
     oneshot
 
 on property:sys.boot_completed=1
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor	interactive
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 533333
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 499200
+
     start qcom-sh
 
 service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
