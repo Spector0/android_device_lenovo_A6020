@@ -1,4 +1,4 @@
-# Copyright (C) 2015 The CyanogenMod Project
+# Copyright (C) 2015 The AICP Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,13 +14,16 @@
 
 $(call inherit-product, device/lenovo/A6020/full_A6020.mk)
 
-# Inherit some common LineageOS stuff.
-$(call inherit-product-if-exists, vendor/lineage/config/common_full_phone.mk)
+# Inherit some common AOSP stuff.
+TARGET_ARCH := arm64
+TARGET_BOOT_ANIMATION_RES := 1080
+$(call inherit-product, vendor/aosp/config/common_full_phone.mk)
 
 # Boot animation
 TARGET_SCREEN_WIDTH := 1080
 TARGET_SCREEN_HEIGHT := 1920
 
+
 ## Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := A6020
-PRODUCT_NAME := lineage_A6020
+PRODUCT_NAME := aosp_A6020
