@@ -19,6 +19,7 @@ $(call inherit-product, device/lenovo/A6020/full_A6020.mk)
 # Inherit some common AOSP stuff.
 TARGET_ARCH := arm64
 TARGET_BOOT_ANIMATION_RES := 1080
+TARGET_DENSITY := xxhdpi
 $(call inherit-product, vendor/aosp/config/common_full_phone.mk)
 
 # Boot animation
