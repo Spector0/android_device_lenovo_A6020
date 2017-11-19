@@ -22,6 +22,7 @@ TARGET_SCREEN_WIDTH := 1080
 TARGET_SCREEN_HEIGHT := 1920
 
 ## Device identifier. This must come after all inclusions
+DOT_OFFICIAL := true
 PRODUCT_DEVICE := A6020
 PRODUCT_NAME := dot_A6020
 
